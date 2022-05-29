@@ -54,10 +54,29 @@ RegisterNetEvent('qb-spawn:client:setupSpawns', function(cData, new, apps)
                 end
             end
 
-            Wait(500)
+            --[[Wait(500)
             SendNUIMessage({
                 action = "setupLocations",
                 locations = QB.Spawns,
+                houses = myHouses,
+            })]] --commented to add dc-open-houses below 
+            local OldConfig = QB.Spawns
+            for i = 1, #OpenHouses do
+                if OpenHouses[i].owner == cData.citizenid then
+                    if QB.Spawns[OpenHouses[i].house] then return end
+                    QB.Spawns[OpenHouses[i].house] = {
+                        coords = OpenHouses[i].spawn,
+                        location = OpenHouses[i].house,
+                        label = OpenHouses[i].house,
+                    }
+                end
+            end
+            local NewConfig = QB.Spawns
+            QB.Spawns = OldConfig
+            Wait(500)
+            SendNUIMessage({
+                action = "setupLocations",
+                locations = NewConfig,
                 houses = myHouses,
             })
         end, cData.citizenid)
@@ -68,7 +87,9 @@ RegisterNetEvent('qb-spawn:client:setupSpawns', function(cData, new, apps)
         })
     end
 end)
-
+RegisterNetEvent('dc-open-houses:client:sync', function(OpenHousesConfig)
+    OpenHouses = OpenHousesConfig
+end)
 -- NUI Callbacks
 
 RegisterNUICallback("exit", function(_, cb)
