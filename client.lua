@@ -174,6 +174,7 @@ local function PostSpawnPlayer(ped)
     SetEntityVisible(PlayerPedId(), true)
     Wait(500)
     DoScreenFadeIn(250)
+    TriggerEvent("backitems:start")
 end
 
 RegisterNUICallback('spawnplayer', function(data, cb)
