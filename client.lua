@@ -16,7 +16,7 @@ local function SetDisplay(bool)
     choosingSpawn = bool
     SetNuiFocus(bool, bool)
     SendNUIMessage({
-        type = "ui",
+        action = "showUi",
         status = bool
     })
 end
@@ -78,12 +78,14 @@ RegisterNetEvent('qb-spawn:client:setupSpawns', function(cData, new, apps)
                 action = "setupLocations",
                 locations = NewConfig,
                 houses = myHouses,
+                isNew = new
             })
         end, cData.citizenid)
     elseif new then
         SendNUIMessage({
             action = "setupAppartements",
             locations = apps,
+            isNew = new
         })
     end
 end)
@@ -95,7 +97,7 @@ end)
 RegisterNUICallback("exit", function(_, cb)
     SetNuiFocus(false, false)
     SendNUIMessage({
-        type = "ui",
+        action = "showUi",
         status = false
     })
     choosingSpawn = false
